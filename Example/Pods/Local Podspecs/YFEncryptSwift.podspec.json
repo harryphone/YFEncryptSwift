@@ -1,0 +1,22 @@
+{
+  "name": "YFEncryptSwift",
+  "version": "0.1.0",
+  "summary": "A short description of YFEncryptSwift.",
+  "description": "TODO: Add long description of the pod here.",
+  "homepage": "https://github.com/HarryPhone/YFEncryptSwift",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "HarryPhone": "harryphone@163.com"
+  },
+  "source": {
+    "git": "https://github.com/HarryPhone/YFEncryptSwift.git",
+    "tag": "0.1.0"
+  },
+  "platforms": {
+    "ios": "9.0"
+  },
+  "source_files": "YFEncryptSwift/Classes/**/*"
+}

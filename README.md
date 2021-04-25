@@ -1,2 +1,1 @@
-# YFEncryptSwift
-swift aes  hash
+看ViewController里的示例

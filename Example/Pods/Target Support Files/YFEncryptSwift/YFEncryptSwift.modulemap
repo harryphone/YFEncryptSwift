@@ -1,0 +1,6 @@
+framework module YFEncryptSwift {
+  umbrella header "YFEncryptSwift-umbrella.h"
+
+  export *
+  module * { export * }
+}

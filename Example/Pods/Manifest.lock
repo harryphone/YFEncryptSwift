@@ -1,0 +1,16 @@
+PODS:
+  - YFEncryptSwift (0.1.0)
+
+DEPENDENCIES:
+  - YFEncryptSwift (from `../`)
+
+EXTERNAL SOURCES:
+  YFEncryptSwift:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  YFEncryptSwift: 47bf6573225088373a7725983c1622490f936147
+
+PODFILE CHECKSUM: 42ce4143346f0c0c1d8fc61efb638e38ee4006f6
+
+COCOAPODS: 1.10.1
