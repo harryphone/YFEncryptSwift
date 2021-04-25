@@ -14,7 +14,7 @@ public struct SymmetricEncrypt {
     }
     
     public var type: Kind
-            
+    
     public var isNoPadding: Bool
     
     public init(type: Kind = .AES, isNoPadding: Bool = false) {
@@ -40,11 +40,11 @@ public struct SymmetricEncrypt {
     public func encrypt(content: String, key: String, iv: [UInt8]? = nil) -> String? {
         guard let data = content.data(using: .utf8),
               let keyData = Data.init(base64Encoded: key)
-              else {
+        else {
             assertionFailure("对称加密String编码格式解析失败")
             return nil
         }
- 
+        
         if let result = encrypt(data: data, keyData: keyData, iv: iv == nil ? nil : Data(iv!)) {
             return result.base64EncodedString()
         } else {
@@ -61,11 +61,11 @@ public struct SymmetricEncrypt {
     public func decrypt(content: String, key: String, iv: [UInt8]? = nil) -> Data? {
         guard let data = Data.init(base64Encoded: content),
               let keyData = Data.init(base64Encoded: key)
-              else {
+        else {
             assertionFailure("对称加密String编码格式解析失败")
             return nil
         }
- 
+        
         return decrypt(data: data, keyData: keyData, iv: iv == nil ? nil : Data(iv!))
     }
     
@@ -107,48 +107,48 @@ extension SymmetricEncrypt {
         
         switch type {
         case .AES:
-            algorithm = kCCAlgorithmAES128;
-            blockSize = kCCBlockSizeAES128;
+            algorithm = kCCAlgorithmAES128
+            blockSize = kCCBlockSizeAES128
             if keySize <= kCCKeySizeAES128 {
                 keySize = kCCKeySizeAES128
             } else if keySize <= kCCKeySizeAES192 {
-                keySize = kCCKeySizeAES192;
+                keySize = kCCKeySizeAES192
             } else {
-                keySize = kCCKeySizeAES256;
+                keySize = kCCKeySizeAES256
             }
         case .DES:
-            algorithm = kCCAlgorithmDES;
-            blockSize = kCCBlockSizeDES;
-            keySize = kCCKeySizeDES;
+            algorithm = kCCAlgorithmDES
+            blockSize = kCCBlockSizeDES
+            keySize = kCCKeySizeDES
         case ._3DES:
-            algorithm = kCCAlgorithm3DES;
-            blockSize = kCCBlockSize3DES;
-            keySize = kCCKeySize3DES;
+            algorithm = kCCAlgorithm3DES
+            blockSize = kCCBlockSize3DES
+            keySize = kCCKeySize3DES
         case .CAST:
-            algorithm = kCCAlgorithmCAST;
-            blockSize = kCCBlockSizeCAST;
-            keySize = min(max(keySize, kCCKeySizeMinCAST), kCCKeySizeMaxCAST);
+            algorithm = kCCAlgorithmCAST
+            blockSize = kCCBlockSizeCAST
+            keySize = min(max(keySize, kCCKeySizeMinCAST), kCCKeySizeMaxCAST)
         case .RC4:
-            algorithm = kCCAlgorithmRC4;
-            blockSize = kCCBlockSizeRC2;
-            keySize = min(max(keySize, kCCKeySizeMinRC4), kCCKeySizeMaxRC4);
+            algorithm = kCCAlgorithmRC4
+            blockSize = kCCBlockSizeRC2
+            keySize = min(max(keySize, kCCKeySizeMinRC4), kCCKeySizeMaxRC4)
         case .RC2:
-            algorithm = kCCAlgorithmRC2;
-            blockSize = kCCBlockSizeRC2;
-            keySize = min(max(keySize, kCCKeySizeMinRC2), kCCKeySizeMaxRC2);
+            algorithm = kCCAlgorithmRC2
+            blockSize = kCCBlockSizeRC2
+            keySize = min(max(keySize, kCCKeySizeMinRC2), kCCKeySizeMaxRC2)
         case .Blowfish:
-            algorithm = kCCAlgorithmBlowfish;
-            blockSize = kCCBlockSizeBlowfish;
-            keySize = min(max(keySize, kCCKeySizeMinBlowfish), kCCKeySizeMaxBlowfish);
+            algorithm = kCCAlgorithmBlowfish
+            blockSize = kCCBlockSizeBlowfish
+            keySize = min(max(keySize, kCCKeySizeMinBlowfish), kCCKeySizeMaxBlowfish)
         }
         
-        var option: CCOptions = 0;
+        var option: CCOptions = 0
         if !isNoPadding {
-            option |= UInt32(kCCOptionPKCS7Padding);
+            option |= UInt32(kCCOptionPKCS7Padding)
         }
         
         if iv == nil {
-            option |= UInt32(kCCOptionECBMode);
+            option |= UInt32(kCCOptionECBMode)
         }
         
         let bufferSize = data.count + blockSize
@@ -173,8 +173,8 @@ extension SymmetricEncrypt {
             return Data.init(bytes: buffer, count: encryptedSize)
         } else {
             print("SymmetricEncrypt errorStatus: \(cryptStatus)")
-            return nil;
+            return nil
         }
-
+        
     }
 }

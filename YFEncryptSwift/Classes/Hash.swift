@@ -64,8 +64,8 @@ public struct YFHash {
         let digest = [UInt8](getHashData())
         return digest.reduce("") { $0 + String(format:"%02x", $1) }
     }
-
-
+    
+    
     
 }
 
@@ -74,34 +74,34 @@ extension YFHash {
     var hashDigestLength: Int32 {
         switch type {
         case .MD5:
-            return CC_MD5_DIGEST_LENGTH;
+            return CC_MD5_DIGEST_LENGTH
         case .SHA1:
-            return CC_SHA1_DIGEST_LENGTH;
+            return CC_SHA1_DIGEST_LENGTH
         case .SHA224:
-            return CC_SHA224_DIGEST_LENGTH;
+            return CC_SHA224_DIGEST_LENGTH
         case .SHA256:
-            return CC_SHA256_DIGEST_LENGTH;
+            return CC_SHA256_DIGEST_LENGTH
         case .SHA384:
-            return CC_SHA384_DIGEST_LENGTH;
+            return CC_SHA384_DIGEST_LENGTH
         case .SHA512:
-            return CC_SHA512_DIGEST_LENGTH;
+            return CC_SHA512_DIGEST_LENGTH
         }
     }
     
     var hmacAlgorithm: Int {
         switch type {
         case .MD5:
-            return kCCHmacAlgMD5;
+            return kCCHmacAlgMD5
         case .SHA1:
-            return kCCHmacAlgSHA1;
+            return kCCHmacAlgSHA1
         case .SHA224:
-            return kCCHmacAlgSHA224;
+            return kCCHmacAlgSHA224
         case .SHA256:
-            return kCCHmacAlgSHA256;
+            return kCCHmacAlgSHA256
         case .SHA384:
-            return kCCHmacAlgSHA384;
+            return kCCHmacAlgSHA384
         case .SHA512:
-            return kCCHmacAlgSHA512;
+            return kCCHmacAlgSHA512
         }
     }
     
@@ -112,33 +112,33 @@ extension YFHash {
         digest.withUnsafeMutableBytes { (digestPtr: UnsafeMutablePointer<UInt8>) in
             // 这里碰到一个坑，Data的长度不一样，内存结构也会不一样（测下来15），本来data.withUnsafeBytes { $0 }只能用NSData(data: data).bytes了
             let dataPtr = NSData(data: data).bytes
-                switch type {
-                case .MD5:
-                    CC_MD5(dataPtr, numericCast(data.count), digestPtr)
-                case .SHA1:
-                    CC_SHA1(dataPtr, numericCast(data.count), digestPtr)
-                case .SHA224:
-                    CC_SHA224(dataPtr, numericCast(data.count), digestPtr)
-                case .SHA256:
-                    CC_SHA256(dataPtr, numericCast(data.count), digestPtr)
-                case .SHA384:
-                    CC_SHA384(dataPtr, numericCast(data.count), digestPtr)
-                case .SHA512:
-                    CC_SHA512(dataPtr, numericCast(data.count), digestPtr)
-                }
+            switch type {
+            case .MD5:
+                CC_MD5(dataPtr, numericCast(data.count), digestPtr)
+            case .SHA1:
+                CC_SHA1(dataPtr, numericCast(data.count), digestPtr)
+            case .SHA224:
+                CC_SHA224(dataPtr, numericCast(data.count), digestPtr)
+            case .SHA256:
+                CC_SHA256(dataPtr, numericCast(data.count), digestPtr)
+            case .SHA384:
+                CC_SHA384(dataPtr, numericCast(data.count), digestPtr)
+            case .SHA512:
+                CC_SHA512(dataPtr, numericCast(data.count), digestPtr)
+            }
         }
         return digest
     }
-
+    
     
     func hmacHashData(data: Data, hmacKey: Data) -> Data {
         // 对比下不同实现形式
-//        var digest = [UInt8](repeating: 0, count: Int(hashDigestLength))
-//        CCHmac(CCHmacAlgorithm(hmacAlgorithm), hmacKey.withUnsafeBytes { $0 }, hmacKey.count, data.withUnsafeBytes { $0 }, data.count, &digest);
-//        return Data(digest)
+        //        var digest = [UInt8](repeating: 0, count: Int(hashDigestLength))
+        //        CCHmac(CCHmacAlgorithm(hmacAlgorithm), hmacKey.withUnsafeBytes { $0 }, hmacKey.count, data.withUnsafeBytes { $0 }, data.count, &digest)
+        //        return Data(digest)
         var digest = Data(count: Int(hashDigestLength))
         digest.withUnsafeMutableBytes {
-            CCHmac(CCHmacAlgorithm(hmacAlgorithm), NSData(data: hmacKey).bytes, hmacKey.count, NSData(data: data).bytes, data.count, $0);
+            CCHmac(CCHmacAlgorithm(hmacAlgorithm), NSData(data: hmacKey).bytes, hmacKey.count, NSData(data: data).bytes, data.count, $0)
         }
         return digest
     }
@@ -159,7 +159,7 @@ extension YFHash {
         while autoreleasepool(invoking: {
             let data = handler.readData(ofLength: YFHash.DefaultChunkSizeForReadingData)
             if data.count > 0 {
-                    _ = updateMethod(&context, NSData(data: data).bytes, numericCast(data.count))
+                _ = updateMethod(&context, NSData(data: data).bytes, numericCast(data.count))
                 return true // Continue
             } else {
                 digest.withUnsafeMutableBytes {
@@ -168,7 +168,7 @@ extension YFHash {
                 return false // End of file
             }
         }) {}
-
+        
         return digest
     }
     
@@ -181,7 +181,7 @@ extension YFHash {
             assertionFailure("Cannot open file: \(filePath)")
             return Data()
         }
-
+        
         switch type {
         case .MD5:
             var context = CC_MD5_CTX()
@@ -215,7 +215,7 @@ extension YFHash {
         }
         
         var context = CCHmacContext()
-        CCHmacInit(&context, CCHmacAlgorithm(hmacAlgorithm), NSData(data: hmacKey).bytes, hmacKey.count);
+        CCHmacInit(&context, CCHmacAlgorithm(hmacAlgorithm), NSData(data: hmacKey).bytes, hmacKey.count)
         
         var digest = Data(count: Int(hashDigestLength))
         
@@ -231,9 +231,9 @@ extension YFHash {
                 return false // End of file
             }
         }) {}
-
+        
         return digest
-
+        
     }
     
 }
